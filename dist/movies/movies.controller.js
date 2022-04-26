@@ -14,61 +14,69 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.MoviesController = void 0;
 const common_1 = require("@nestjs/common");
+const create_movie_dto_1 = require("./dto/create-movie.dto");
+const update_movie_dto_1 = require("./dto/update-movie.dto");
+const Movie_entitiy_1 = require("./entities/Movie.entitiy");
+const movies_service_1 = require("./movies.service");
 let MoviesController = class MoviesController {
-    getAll() {
-        return "This will return all movies!";
+    constructor(moviesService) {
+        this.moviesService = moviesService;
     }
-    search(searchingYear) {
-        return `Searching for a movie after ${searchingYear} `;
+    getAll() {
+        return this.moviesService.getAll();
     }
     getOne(id) {
-        return `This will return ${id}!`;
+        return this.moviesService.getOne(id);
     }
     createmovie(movieData) {
-        console.log(movieData.name);
-        return movieData;
+        this.moviesService.create(movieData);
+        return "created!";
+    }
+    remove(movieId) {
+        return this.moviesService.deleteOne(movieId);
     }
     patchingdata(movieId, updateData) {
-        return Object.assign({ updatedMovie: movieId }, updateData);
+        return this.moviesService.update(movieId, updateData);
     }
 };
 __decorate([
     (0, common_1.Get)(),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", []),
-    __metadata("design:returntype", void 0)
+    __metadata("design:returntype", Array)
 ], MoviesController.prototype, "getAll", null);
-__decorate([
-    (0, common_1.Get)('search'),
-    __param(0, (0, common_1.Query)("year")),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String]),
-    __metadata("design:returntype", void 0)
-], MoviesController.prototype, "search", null);
 __decorate([
     (0, common_1.Get)("/:id"),
     __param(0, (0, common_1.Param)('id')),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [String]),
-    __metadata("design:returntype", void 0)
+    __metadata("design:returntype", Movie_entitiy_1.Movie)
 ], MoviesController.prototype, "getOne", null);
 __decorate([
     (0, common_1.Post)(),
     __param(0, (0, common_1.Body)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Object]),
+    __metadata("design:paramtypes", [create_movie_dto_1.CreateMovieDTO]),
     __metadata("design:returntype", void 0)
 ], MoviesController.prototype, "createmovie", null);
 __decorate([
-    (0, common_1.Patch)('/:id'),
+    (0, common_1.Delete)(':id'),
+    __param(0, (0, common_1.Param)('id')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String]),
+    __metadata("design:returntype", void 0)
+], MoviesController.prototype, "remove", null);
+__decorate([
+    (0, common_1.Patch)(':id'),
     __param(0, (0, common_1.Param)('id')),
     __param(1, (0, common_1.Body)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String, Object]),
+    __metadata("design:paramtypes", [String, update_movie_dto_1.UpdateMovieDTO]),
     __metadata("design:returntype", void 0)
 ], MoviesController.prototype, "patchingdata", null);
 MoviesController = __decorate([
-    (0, common_1.Controller)('movies')
+    (0, common_1.Controller)('movies'),
+    __metadata("design:paramtypes", [movies_service_1.MoviesService])
 ], MoviesController);
 exports.MoviesController = MoviesController;
 //# sourceMappingURL=movies.controller.js.map
